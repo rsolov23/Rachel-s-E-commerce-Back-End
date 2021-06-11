@@ -6,19 +6,33 @@ const { Product, Category, Tag, ProductTag } = require("../../models");
 // get all products
 router.get("/", (req, res) => {
   // find all products
-  product.findAll({}).then((dbProductData) => res.json(dbProductData));
+  product
+    .findAll({
+      include: {
+        model: Category,
+        attributes: ["category_name"],
+      },
+      include: {
+        model: ProductTag,
+        attributes: ["product_tag"],
+      },
+    })
+    .then((dbProductData) => res.json(dbProductData));
   // be sure to include its associated Category and Tag data
 });
 
 // get one product
 router.get("/:id", (req, res) => {
-  Product.findAll({
+  // find a single product by its `id`
+  Product.findOne({
+    where: {
+      id: req.params.id,
+    },
     include: {
       model: Category,
       attributes: ["category_name"],
     },
-  });
-  // find a single product by its `id`
+  }).then((dbProductData) => res.json(dbProductData));
   // be sure to include its associated Category and Tag data
 });
 
@@ -97,6 +111,11 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  Product.destroy({
+    where: {
+      id: req.params.id,
+    },
+  }).then((dbProductData) => res.json(dbProductData));
   // delete one product by its `id` value
 });
 

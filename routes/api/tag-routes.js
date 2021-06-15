@@ -8,8 +8,8 @@ router.get("/", (req, res) => {
   Tag.findAll({
     include: {
       model: Product,
-      as: "product_tags",
-      // attributes: ["stock", "product_name", "id", "price"],
+      // as: "product_tags",
+      attributes: ["product_name"],
     },
   }).then((dbTagData) => res.json(dbTagData));
   // be sure to include its associated Product data
@@ -23,7 +23,7 @@ router.get("/:id", (req, res) => {
     },
     include: {
       model: Product,
-      as: "product_tags"
+      // as: "product_tags",
     },
   }).then((dbTagData) => res.json(dbTagData));
   // be sure to include its associated Product data
